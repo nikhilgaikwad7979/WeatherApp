@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f4f4f4;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .weather-info {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container col-md-6">
+        <div class="card text-center">
+            <div class="card-body mb-2 text-bg-dark">
+                <h1 class="card-title">Weather App</h1>
+                <form id="weather-form" class="mb-3">
+                    <div class="row justify-content-center mb-2">
+                        <div class="col-8">
+                            <input type="text" id="city-input" class="form-control" placeholder="Enter city" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Get Weather</button>
+                </form>
+
+                <div id="error-message" class="text-danger"></div>
+                <div id="weather-info" class="weather-info" style="display: none;">
+                    <h2 id="city-name"></h2>
+                    <p>Temperature: <span id="temp"></span> °C</p>
+                    <p>Weather: <span id="weather-desc"></span></p>
+                    <p>Humidity: <span id="humidity"></span>%</p>
+                    <p>Wind Speed: <span id="wind-speed"></span> m/s</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        const apiKey = "8b23a2d55eba747d8bb9de63c6430b7f"; // Your actual API key
+
+        // Handle form submission
+        document.getElementById('weather-form').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const city = document.getElementById('city-input').value.trim();
+            const errorMessage = document.getElementById('error-message');
+            const weatherInfo = document.getElementById('weather-info');
+            
+            // Clear previous data
+            errorMessage.textContent = '';
+            weatherInfo.style.display = 'none';
+
+            if (city) {
+                const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric`;
+
+                try {
+                    const response = await fetch(url);
+                    const data = await response.json();
+
+                    if (data.cod !== 200) {
+                        throw new Error("City not found");
+                    }
+
+                    // Populate weather info
+                    document.getElementById('city-name').textContent = data.name;
+                    document.getElementById('temp').textContent = data.main.temp;
+                    document.getElementById('weather-desc').textContent = data.weather[0].description;
+                    document.getElementById('humidity').textContent = data.main.humidity;
+                    document.getElementById('wind-speed').textContent = data.wind.speed;
+
+                    weatherInfo.style.display = 'block';
+                } catch (error) {
+                    errorMessage.textContent = "Error fetching data. Please try again later.";
+                }
+            } else {
+                errorMessage.textContent = "Please enter a city name.";
+            }
+        });
+    </script>
+</body>
+</html>
