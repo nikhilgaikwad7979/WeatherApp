@@ -1,3 +1,4 @@
  Calculator web app using Html , CSS and Javascript
-![Screenshot (5)](https://github.com/user-attachments/assets/0bc6999c-871e-4781-bcfe-cb04a9518759)
+ ![Capture](https://github.com/user-attachments/assets/096ae944-84c8-455e-a69b-c7feeda95640)
 ![Screenshot (6)](https://github.com/user-attachments/assets/fe543b37-1932-472b-9ced-55c6825bc040)
+
